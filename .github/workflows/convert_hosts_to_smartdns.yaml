@@ -38,4 +38,7 @@ jobs:
         echo "Generated at: $(date)" >> README.md
         echo "\n[View Raw Config](https://github.com/${{ github.repository }}/raw/main/next-hosts.conf)" >> README.md
         echo "[View Config via jsDelivr](https://cdn.jsdelivr.net/gh/${{ github.repository }}/next-hosts.conf)" >> README.md
+        echo -e "\n\`\`\`" >> README.md
+        cat next-hosts.conf >> README.md
+        echo -e "\n\`\`\`" >> README.md
       shell: bash
