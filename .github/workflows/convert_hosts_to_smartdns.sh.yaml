@@ -1,0 +1,37 @@
+name: Generate SmartDNS Config
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+
+jobs:
+  generate-config:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Download hosts file
+      run: wget -O next-hosts.txt https://gitlab.com/ineo6/hosts/-/raw/master/next-hosts
+
+    - name: Run conversion script and save to next-hosts.conf
+      run: |
+        ./convert_hosts_to_smartdns.sh > next-hosts.conf
+      working-directory: ${{ github.workspace }}
+
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add next-hosts.conf
+        git commit -m "Update SmartDNS config" || true
+        git push
+
+    - name: Display result in README
+      run: |
+        echo "## SmartDNS Config\n" >> README.md
+        echo "Generated at: $(date)" >> README.md
+        echo "\n[View Raw Config](https://github.com/${{ github.repository }}/raw/main/next-hosts.conf)" >> README.md
+        echo "[View Config via jsDelivr](https://cdn.jsdelivr.net/gh/${{ github.repository }}/next-hosts.conf)" >> README.md
+      shell: bash
