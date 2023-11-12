@@ -20,6 +20,7 @@ jobs:
 
     - name: Run conversion script and save to next-hosts.conf
       run: |
+        chmod +x convert_hosts_to_smartdns.sh
         ./convert_hosts_to_smartdns.sh > next-hosts.conf
       working-directory: ${{ github.workspace }}
 
