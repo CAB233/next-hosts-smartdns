@@ -24,6 +24,11 @@ jobs:
         ./convert_hosts_to_smartdns.sh > next-hosts.conf
       working-directory: ${{ github.workspace }}
 
+    - name: Update time in SmartDNS config
+      run: |
+        sed -i "1s/.*/# Generated at: $(date '+%Y-%m-%d %H:%M:%S')/" next-hosts.conf
+      working-directory: ${{ github.workspace }}
+
     - name: Commit and push changes
       run: |
         git config --local user.email "action@github.com"
